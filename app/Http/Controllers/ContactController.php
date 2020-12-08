@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Models\Contact;
-use App\Models\CustomAttribute as Custom;
 
 class ContactController extends Controller
 {
@@ -18,6 +16,11 @@ class ContactController extends Controller
         //
     }
 
+    /**
+     * Get the all the distinct custom attribute keys that will be displayed in the table header to frontend
+     *
+     * @return Array<Strings>
+     */
     private function getCustomAttributeKeys()
     {
       $custonAttributes = DB::table('custom_attributes')->select('key')->groupBy('key')->get();
@@ -30,6 +33,13 @@ class ContactController extends Controller
       return $customAttributeKeys;
     }
 
+    /**
+     * Get the the contacts with merged custom attributes
+     * It will get the contacts first with pagination
+     * Then it will modify the collection data to merge the custom attributes
+     *
+     * @return JSON
+     */
     public function index(Request $request)
     {
       $sort   = $request->sort;
@@ -65,6 +75,13 @@ class ContactController extends Controller
       return $this->response(['contacts' => $contacts, 'customAttributes' => $customAttributeKeys]);
     }
 
+    /**
+     * Adds bulk contacts with custom attributes
+     * Loop through each contact data and store the data in contacts
+     * If there is a custom attribute found, store to custom_attributes
+     *
+     * @return JSON
+     */
     public function import(Request $request)
     {
       $contactKeys = ['team_id', 'name', 'phone', 'email', 'sticky_phone_number_id'];

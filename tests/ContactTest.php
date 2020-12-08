@@ -54,7 +54,7 @@ class ContactTest extends TestCase
     }
 
     /**
-     * test on importing contacts
+     * test on importing contacts with custom attributes
      * @test
      * @return void
      */
