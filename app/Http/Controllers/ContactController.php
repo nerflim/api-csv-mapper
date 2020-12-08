@@ -42,6 +42,12 @@ class ContactController extends Controller
      */
     public function index(Request $request)
     {
+      $this->validate($request, [
+        'page' => 'required|integer',
+        'pageSize' => 'required|integer',
+        'sortBy' => 'required_with:sort'
+      ]);
+
       $sort   = $request->sort;
       $sortBy = $request->sortBy;
 
